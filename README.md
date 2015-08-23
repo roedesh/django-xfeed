@@ -44,8 +44,8 @@ Generate a list of items
 -----------
 To generate a list of items from your feed, use the `generate_feed_list` tag. It requires a feed object. It also accepts the following parameters:
 * amount (int) Amount of items to show
-* list_class (str) Class to use on the <ul> or <ol>
-* li_class (str) Class to use on the <li>
+* list_class (str) Class to use on the `<ul>` or `<ol>`
+* li_class (str) Class to use on the `<li>`
 * list_type (str) Type of list to use, defaults to 'ul'
 
 Example: `{% generate_feed_list 5 'my-list' 'my-list-item' 'ol' %}`
