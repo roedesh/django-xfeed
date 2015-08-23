@@ -15,7 +15,6 @@ Documentation
 
 Dependencies
 -----------
-
 xFeed has a small set of dependencies.
 
 * feedparser
