@@ -36,9 +36,19 @@ Quick start
 4. Start the development server and visit http://127.0.0.1:8000/admin/
    to create a feed (you'll need the Admin app enabled).
 
-5. Run `python manage.py refresh_feeds` to fetch content.
+5. Run `python manage.py refresh_xfeeds` to fetch content.
 
 6. Revisit admin to find your Tweets and/or RSS items.
+
+Generate a list of items
+-----------
+To generate a list of items from your feed, use the `generate_feed_list` tag. It requires a feed object. It also accepts the following parameters:
+* amount (int) Amount of items to show
+* list_class (str) Class to use on the `<ul>` or `<ol>`
+* li_class (str) Class to use on the `<li>`
+* list_type (str) Type of list to use, defaults to 'ul'
+
+Example: `{% generate_feed_list 5 'my-list' 'my-list-item' 'ol' %}`
 
 Documentation
 -----------
