@@ -36,7 +36,7 @@ Quick start
 4. Start the development server and visit http://127.0.0.1:8000/admin/
    to create a feed (you'll need the Admin app enabled).
 
-5. Run `python manage.py refresh_feeds` to fetch content.
+5. Run `python manage.py refresh_xfeeds` to fetch content.
 
 6. Revisit admin to find your Tweets and/or RSS items.
 
