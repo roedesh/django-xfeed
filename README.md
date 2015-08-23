@@ -11,6 +11,8 @@ Features
 -----------
 * Fetches RSS items and channel data of a RSS feed
 * Fetches tweets from the user timeline
+* Handy template tag for generating a list of items
+* Some useful management commands for managing your feeds
 
 Install with pip
 -----------
@@ -45,7 +47,6 @@ Documentation
 Dependencies
 -----------
 xFeed has a small set of dependencies.
-
 * feedparser
 * python-twitter
 * pytz
