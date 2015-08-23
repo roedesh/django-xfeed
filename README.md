@@ -1,3 +1,7 @@
+.. image:: https://pypip.in/version/django-xfeed/badge.svg
+    :target: https://pypi.python.org/pypi/django-xfeed/
+    :alt: Latest Version
+    
 xFeed
 -----------
 *django-xfeed is a reusable application for Django, that aims to be a single aggregator for various media types (e.g. RSS, Twitter, Facebook).*
@@ -9,6 +13,14 @@ Features
 * Fetches RSS items and channel data of a RSS feed
 * Fetches tweets from the user timeline
 
+Install with pip
+-----------
+Run `pip install django-xfeed`
+
+Install with setup.py
+-----------
+Run `python setup.py install`
+
 Quick start
 -----------
 1. Add "xfeed" to your INSTALLED_APPS setting like this::
@@ -18,7 +30,7 @@ Quick start
         'xfeed',
     )
 
-2. Run `python manage.py migrate` to create the xfeed's models.
+2. Run `python manage.py migrate` to create the xfeed models.
 
 4. Start the development server and visit http://127.0.0.1:8000/admin/
    to create a feed (you'll need the Admin app enabled).
