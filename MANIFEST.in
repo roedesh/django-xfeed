@@ -1,0 +1,4 @@
+include AUTHORS CHANGES README INSTALL LICENCE
+recursive-include xfeed *.py *.html *.js *.css
+include docs/Makefile
+recursive-include docs/source *
