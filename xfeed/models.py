@@ -19,17 +19,17 @@ from time import mktime
 import twitter
 import urlparse
 
-__author__ = "Ruud Schroën"
-__copyright__ = "Copyright 2015, Ruud Schroën"
-__license__ = "GPL"
-__version__ = "0.1"
-__maintainer__ = "Ruud Schroën"
-__email__ = "schroenruud@gmail.com"
-__status__ = "Development"
+__author__ = 'Ruud Schroën'
+__copyright__ = 'Copyright 2015, Ruud Schroën'
+__license__ = 'GPL'
+__version__ = '0.1'
+__maintainer__ = 'Ruud Schroën'
+__email__ = 'schroenruud@gmail.com'
+__status__ = 'Development'
 
 FEED_TYPES = [
-    ('twitter', "Twitter"),
-    ('rss', "RSS"),
+    ('twitter', 'Twitter'),
+    ('rss', 'RSS'),
 ]
 
 
@@ -111,12 +111,12 @@ class Feed(Base):
             rss_items = RSSItem.objects.filter(feed=self, pub_date__lt=date)
             rss_items_count = rss_items.count()
             rss_items.delete()
-        elif feed_type == "twitter":
+        elif feed_type == 'twitter':
             rss_items_count = 0
             tweets = Tweet.objects.filter(feed=self, pub_date__lt=date)
             tweets_count = tweets.count()
             tweets.delete()
-        elif feed_type == "rss":
+        elif feed_type == 'rss':
             tweets_count = 0
             rss_items = RSSItem.objects.filter(feed=self, pub_date__lt=date)
             rss_items_count = rss_items.count()
@@ -138,12 +138,12 @@ class Feed(Base):
             rss_items = RSSItem.objects.filter(feed=self)
             rss_items_count = rss_items.count()
             rss_items.delete()
-        elif feed_type == "twitter":
+        elif feed_type == 'twitter':
             rss_items_count = 0
             tweets = Tweet.objects.filter(feed=self)
             tweets_count = tweets.count()
             tweets.delete()
-        elif feed_type == "rss":
+        elif feed_type == 'rss':
             tweets_count = 0
             rss_items = RSSItem.objects.filter(feed=self)
             rss_items_count = rss_items.count()
@@ -157,11 +157,11 @@ class Feed(Base):
         :raises: RuntimeError
 
         """
-        if self.feed_type == "twitter":
-            consumer_key = getattr(settings, "TWITTER_CONSUMER_KEY", None)
-            consumer_secret = getattr(settings, "TWITTER_CONSUMER_SECRET", None)
-            access_token_key = getattr(settings, "TWITTER_ACCESS_TOKEN_KEY", None)
-            access_token_secret = getattr(settings, "TWITTER_ACCESS_TOKEN_SECRET", None)
+        if self.feed_type == 'twitter':
+            consumer_key = getattr(settings, 'TWITTER_CONSUMER_KEY', None)
+            consumer_secret = getattr(settings, 'TWITTER_CONSUMER_SECRET', None)
+            access_token_key = getattr(settings, 'TWITTER_ACCESS_TOKEN_KEY', None)
+            access_token_secret = getattr(settings, 'TWITTER_ACCESS_TOKEN_SECRET', None)
 
             if not consumer_key:
                 raise NoCredentials(_('Twitter consumer key missing'))
@@ -255,7 +255,7 @@ class Tweet(Base):
     Stores a single Tweet, related to model:'xfeed.Feed'
     """
     feed = models.ForeignKey(Feed, related_name="tweets", verbose_name=_('feed'))
-    ogid = models.CharField(max_length=255, verbose_name=_("original ID"))
+    ogid = models.CharField(max_length=255, verbose_name=_('original ID'))
     create_date = models.DateTimeField(verbose_name=_('create date'))
     from_user_id = models.CharField(max_length=255, verbose_name=_('from user ID'))
     from_user_name = models.CharField(max_length=255, verbose_name=_('from user name'))
@@ -266,7 +266,7 @@ class Tweet(Base):
     to_user_id = models.CharField(max_length=255, verbose_name=_('reply to user id'), null=True)
     to_user_screen_name = models.CharField(max_length=255, verbose_name=_('reply to user screen name'), null=True)
     to_status_id = models.CharField(max_length=255, verbose_name=_('reply to status ID'), null=True)
-    hide = models.BooleanField(default=False, verbose_name=_("hide this tweet"))
+    hide = models.BooleanField(default=False, verbose_name=_('hide this tweet'))
 
     class Meta:
         ordering = ('create_date',)
@@ -297,20 +297,20 @@ class RSSItem(Base):
     Stores a single RSS item, related to model:'xfeed.Feed'
     """
     feed = models.ForeignKey(Feed, related_name="rss_items", verbose_name=_('feed'))
-    ogid = models.CharField(max_length=255, verbose_name=_("original ID"))
+    ogid = models.CharField(max_length=255, verbose_name=_('original ID'))
     ogid_is_link = models.BooleanField(default=False, verbose_name=_('original ID is link'))
     pub_date = models.DateTimeField(verbose_name=_('publishing date'))
     language = models.CharField(max_length=255, verbose_name=_('iso language code'))
-    title = models.CharField(max_length=255, verbose_name=_("title"))
-    description = models.TextField(verbose_name=_("description"))
-    link = models.URLField(max_length=255, verbose_name=_("link"))
-    hide = models.BooleanField(default=False, verbose_name=_("hide this item"))
+    title = models.CharField(max_length=255, verbose_name=_('title'))
+    description = models.TextField(verbose_name=_('description'))
+    link = models.URLField(max_length=255, verbose_name=_('link'))
+    hide = models.BooleanField(default=False, verbose_name=_('hide this item'))
 
     class Meta:
         ordering = ('feed', 'title',)
         verbose_name = _('RSS item')
         verbose_name_plural = _('RSS items')
-        get_latest_by = "ogid"
+        get_latest_by = 'ogid'
         app_label = 'xfeed'
 
     def __str__(self):
@@ -336,20 +336,20 @@ class RSSChannelData(Base):
     Holds additional information about the feed itself.
     """
     feed = models.OneToOneField(Feed, primary_key=True)
-    title = models.CharField(max_length=255, verbose_name=_("title"))
-    subtitle = models.CharField(max_length=255, verbose_name=_("subtitle"))
-    link = models.CharField(max_length=255, verbose_name=_("link"))
-    language = models.CharField(max_length=255, verbose_name=_("language"))
+    title = models.CharField(max_length=255, verbose_name=_('title'))
+    subtitle = models.CharField(max_length=255, verbose_name=_('subtitle'))
+    link = models.CharField(max_length=255, verbose_name=_('link'))
+    language = models.CharField(max_length=255, verbose_name=_('language'))
     pub_date = models.DateTimeField(verbose_name=_('publishing date'))
     last_build_date = models.DateTimeField(verbose_name=_('last build date'))
     generator = models.CharField(max_length=255, verbose_name=_('generator'))
-    copyright = models.CharField(max_length=255, verbose_name=_("copyright"))
+    copyright = models.CharField(max_length=255, verbose_name=_('copyright'))
 
     class Meta:
         ordering = ('feed',)
         verbose_name = _('RSS channel data')
         verbose_name_plural = _('RSS channel data')
-        get_latest_by = "ogid"
+        get_latest_by = 'ogid'
         app_label = 'xfeed'
 
     def __str__(self):
