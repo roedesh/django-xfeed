@@ -1,6 +1,4 @@
-.. image:: https://pypip.in/version/django-xfeed/badge.svg
-    :target: https://pypi.python.org/pypi/django-xfeed/
-    :alt: Latest Version
+[![Latest Version](https://pypip.in/version/django-xfeed/badge.svg)](https://pypi.python.org/pypi/django-xfeed/)
     
 xFeed
 -----------
