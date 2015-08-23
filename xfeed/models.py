@@ -64,12 +64,12 @@ class Feed(Base):
     uuid = models.CharField(max_length=100, blank=True, unique=True)
     target = models.CharField(max_length=255, verbose_name=_('feed url'),
                               help_text=_('Enter a valid URL or Twitter screen name'))
-    api_point = models.CharField(max_length=255, blank=True, verbose_name=_('api point'),
+    api_point = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('api point'),
                                  help_text=_('Specify an API point (e.g. user timeline of Twitter. '
                                              'Check documentation for more information.'))
     website = models.URLField(max_length=255, verbose_name=_('website'),
-                              help_text=_('Website url (e.g. http://mywebsite.com)'), blank=True)
-    last_refreshed = models.DateTimeField(verbose_name=_('last refreshed'), blank=True)
+                              help_text=_('Website url (e.g. http://mywebsite.com)'), null=True, blank=True)
+    last_refreshed = models.DateTimeField(verbose_name=_('last refreshed'), null=True, blank=True)
     is_active = models.BooleanField(default=True, verbose_name=_('is active'),
                                     help_text=_('Must be checked if this feed should be updated'))
 
