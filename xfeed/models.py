@@ -21,7 +21,7 @@ import urlparse
 
 __author__ = 'Ruud Schroën'
 __copyright__ = 'Copyright 2015, Ruud Schroën'
-__license__ = 'GPL'
+__license__ = 'BSD'
 __version__ = '0.1'
 __maintainer__ = 'Ruud Schroën'
 __email__ = 'schroenruud@gmail.com'
@@ -104,24 +104,24 @@ class Feed(Base):
         :returns:  Object -- holds counts for the amount of deleted tweets/rss-items
 
         """
+        tweets_count = 0
+        rss_items_count = 0
         if not feed_type:
-            tweets = Tweet.objects.filter(feed=self, pub_date__lt=date)
+            tweets = Tweet.objects.filter(feed=self, create_date__lt=date)
             tweets_count = tweets.count()
             tweets.delete()
             rss_items = RSSItem.objects.filter(feed=self, pub_date__lt=date)
             rss_items_count = rss_items.count()
             rss_items.delete()
         elif feed_type == 'twitter':
-            rss_items_count = 0
-            tweets = Tweet.objects.filter(feed=self, pub_date__lt=date)
+            tweets = Tweet.objects.filter(feed=self, create_date__lt=date)
             tweets_count = tweets.count()
             tweets.delete()
         elif feed_type == 'rss':
-            tweets_count = 0
             rss_items = RSSItem.objects.filter(feed=self, pub_date__lt=date)
             rss_items_count = rss_items.count()
             rss_items.delete()
-        return {'tweets_count': tweets_count, 'rss_items': rss_items_count}
+        return {'tweets_count': tweets_count, 'rss_items_count': rss_items_count}
 
     def flush(self, feed_type=None):
         """Removes all Tweets and RSSItems of a Feed.
@@ -131,6 +131,8 @@ class Feed(Base):
         :returns:  Object -- holds counts for the amount of deleted tweets/rss-items
 
         """
+        tweets_count = 0
+        rss_items_count = 0
         if not feed_type:
             tweets = Tweet.objects.filter(feed=self)
             tweets_count = tweets.count()
@@ -139,16 +141,15 @@ class Feed(Base):
             rss_items_count = rss_items.count()
             rss_items.delete()
         elif feed_type == 'twitter':
-            rss_items_count = 0
             tweets = Tweet.objects.filter(feed=self)
             tweets_count = tweets.count()
             tweets.delete()
         elif feed_type == 'rss':
-            tweets_count = 0
+
             rss_items = RSSItem.objects.filter(feed=self)
             rss_items_count = rss_items.count()
             rss_items.delete()
-        return {'tweets_count': tweets_count, 'rss_items': rss_items_count}
+        return {'tweets_count': tweets_count, 'rss_items_count': rss_items_count}
 
     def refresh(self):
         """Refreshes a Feed. Gathers new content if available.
