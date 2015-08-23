@@ -15,3 +15,4 @@ class Command(BaseCommand):
         translation.activate(settings.LANGUAGE_CODE)
         for feed in Feed.objects.filter(is_active=True):
             feed.refresh()
+            self.stdout.write('Successfully refreshed %s-feed %s.' % (feed.get_feed_type_display(), feed.uuid))

@@ -9,7 +9,7 @@ class Command(BaseCommand):
     """
     This command will remove all Tweets and RSS items from a feed
     """
-    help = _('Refresh all active feeds')
+    help = _('Remove all items from feed')
 
     def add_arguments(self, parser):
         # Positional arguments
