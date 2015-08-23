@@ -48,7 +48,7 @@ To generate a list of items from your feed, use the `generate_feed_list` tag. It
 * li_class (str) Class to use on the `<li>`
 * list_type (str) Type of list to use, defaults to 'ul'
 
-Example: `{% generate_feed_list 5 'my-list' 'my-list-item' 'ol' %}`
+Example: `{% generate_feed_list feed 5 'my-list' 'my-list-item' 'ol' %}`
 
 Documentation
 -----------
