@@ -14,5 +14,5 @@ setup(
     description='A reusable application for Django, that aims to be a single '
                 'aggregator for various media types (e.g. RSS, Twitter, Facebook).',
     long_description=open('README.md').read(),
-    zip_safe=False,
+    zip_safe=True,
 )
