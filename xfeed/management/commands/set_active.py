@@ -9,7 +9,7 @@ class Command(BaseCommand):
     """
     This command sets the is_active state of a feed
     """
-    help = _('Refresh all active feeds')
+    help = _('Set is_active state of a feed')
 
     def add_arguments(self, parser):
         # Positional arguments

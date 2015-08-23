@@ -145,7 +145,6 @@ class Feed(Base):
             tweets_count = tweets.count()
             tweets.delete()
         elif feed_type == 'rss':
-
             rss_items = RSSItem.objects.filter(feed=self)
             rss_items_count = rss_items.count()
             rss_items.delete()

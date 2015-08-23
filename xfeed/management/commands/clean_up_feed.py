@@ -10,7 +10,7 @@ class Command(BaseCommand):
     """
     This command will clean up a feed by removing Tweets and RSS item before a specified date
     """
-    help = _('Refresh all active feeds')
+    help = _('Remove all items from feed before a specified date')
 
     def add_arguments(self, parser):
         # Positional arguments
