@@ -3,7 +3,7 @@
 Provides Feed, Tweet, RSSItem and RSSChannelData, classes for storing data about a feed and items fetched from the feed.
 
 Feed holds the necessary information for fetching items from the feed.
-Tweets holds information about tweets fetched from the feed.
+Tweet holds information about tweets fetched from the feed.
 RSSItems holds information about rss items fetched from the feed.
 RSSChannelData holds information about a RSS feed (e.g. generator, feed title, copyright)
 """
@@ -64,12 +64,12 @@ class Feed(Base):
     uuid = models.CharField(max_length=100, blank=True, unique=True)
     target = models.CharField(max_length=255, verbose_name=_('feed url'),
                               help_text=_('Enter a valid URL or Twitter screen name'))
-    api_point = models.CharField(max_length=255, null=True, verbose_name=_('api point'),
+    api_point = models.CharField(max_length=255, blank=True, verbose_name=_('api point'),
                                  help_text=_('Specify an API point (e.g. user timeline of Twitter. '
                                              'Check documentation for more information.'))
     website = models.URLField(max_length=255, verbose_name=_('website'),
-                              help_text=_('Website url (e.g. http://mywebsite.com)'), null=True)
-    last_refreshed = models.DateTimeField(verbose_name=_('last refreshed'), null=True, blank=True)
+                              help_text=_('Website url (e.g. http://mywebsite.com)'), blank=True)
+    last_refreshed = models.DateTimeField(verbose_name=_('last refreshed'), blank=True)
     is_active = models.BooleanField(default=True, verbose_name=_('is active'),
                                     help_text=_('Must be checked if this feed should be updated'))
 
@@ -82,26 +82,17 @@ class Feed(Base):
     def __str__(self):
         return self.name
 
-    def toggle_active(self, force=None):
-        """Toggles the active state on/off for a feed.
+    def set_active(self, which):
+        """Sets the active state on/off for a Feed.
 
-        :param force: Forced boolean value to use.
-        :type force: bool
-        :returns:  bool -- the new is_active value (only if the force parameter is None).
+        :param which: True or False.
+        :type which: bool
         :raises: ValueError
 
         """
-        if force:
-            if not isinstance(force, (bool,)):
-                raise ValueError(_('The "force" parameter must be True or False!'))
-            self.is_active = force
-        else:
-            if self.is_active:
-                self.is_active = False
-                return False
-            else:
-                self.is_active = True
-                return True
+        if not isinstance(which, (bool,)):
+            raise ValueError(_('The "force" parameter must be True or False!'))
+        self.is_active = which
 
     def clean_up(self, date, feed_type=None):
         """Cleans up a Feed by removing all Tweets and RSSItems that where published before a given date.
@@ -167,30 +158,34 @@ class Feed(Base):
 
         """
         if self.feed_type == "twitter":
-            if not hasattr(settings, 'TWITTER_CONSUMER_KEY'):
+            consumer_key = getattr(settings, "TWITTER_CONSUMER_KEY", None)
+            consumer_secret = getattr(settings, "TWITTER_CONSUMER_SECRET", None)
+            access_token_key = getattr(settings, "TWITTER_ACCESS_TOKEN_KEY", None)
+            access_token_secret = getattr(settings, "TWITTER_ACCESS_TOKEN_SECRET", None)
+
+            if not consumer_key:
                 raise NoCredentials(_('Twitter consumer key missing'))
-            if not hasattr(settings, 'TWITTER_CONSUMER_SECRET'):
+            if not consumer_secret:
                 raise NoCredentials(_('Twitter consumer secret missing'))
-            if not hasattr(settings, 'TWITTER_ACCESS_TOKEN_KEY'):
+            if not access_token_key:
                 raise NoCredentials(_('Twitter access token key missing'))
-            if not hasattr(settings, 'TWITTER_ACCESS_TOKEN_SECRET'):
+            if not access_token_secret:
                 raise NoCredentials(_('Twitter access token secret missing'))
 
-            existing_twitter = Tweet.objects.filter(feed=self)
             try:
-                api = twitter.Api(consumer_key=getattr(settings, "TWITTER_CONSUMER_KEY", None),
-                                  consumer_secret=getattr(settings, "TWITTER_CONSUMER_SECRET", None),
-                                  access_token_key=getattr(settings, "TWITTER_ACCESS_TOKEN_KEY", None),
-                                  access_token_secret=getattr(settings, "TWITTER_ACCESS_TOKEN_SECRET", None))
+                api = twitter.Api(consumer_key=consumer_key,
+                                  consumer_secret=consumer_secret,
+                                  access_token_key=access_token_key,
+                                  access_token_secret=access_token_secret)
                 statuses = api.GetUserTimeline(screen_name=self.target)
                 for s in statuses:
-                    go = True
+                    new = True
                     ogid = s.id
                     for t in self.tweets.all():
                         if t.ogid == str(ogid):
-                            go = False
+                            new = False
                             break
-                    if go:
+                    if new:
                         current_tz = timezone.get_current_timezone()
                         naive_date = datetime.strptime(s.created_at, '%a %b %d %H:%M:%S +0000 %Y')
                         create_date = current_tz.localize(naive_date)
@@ -205,7 +200,7 @@ class Feed(Base):
         if self.feed_type == "rss":
             if not bool(urlparse.urlparse(self.target).scheme):
                 raise ValueError('RSS target is not a valid URL')
-            existing_rss = RSSItem.objects.filter(feed=self)
+
             try:
                 d = feedparser.parse(self.target)
                 current_tz = timezone.get_current_timezone()
@@ -218,11 +213,10 @@ class Feed(Base):
                 try:
                     # If channel data exists, update
                     RSSChannelData.objects.filter(feed=self).update(title=d.feed.title, subtitle=d.feed.subtitle,
-                                                                    link=d.feed.link,
-                                                                    language=d.feed.language, pub_date=feed_pub_date,
+                                                                    link=d.feed.link, language=d.feed.language,
+                                                                    pub_date=feed_pub_date,
                                                                     last_build_date=last_build_date,
-                                                                    generator=d.feed.generator,
-                                                                    copyright=d.feed.rights)
+                                                                    generator=d.feed.generator, copyright=d.feed.rights)
                 except RSSChannelData.DoesNotExist:
                     # Else create a new record
                     channel_data = RSSChannelData(feed=self, title=d.feed.title, subtitle=d.feed.subtitle,
@@ -232,18 +226,18 @@ class Feed(Base):
                                                   )
                     channel_data.save()
 
+                # Inserting new posts into database
                 for post in d.entries:
-                    go = True
+                    new = True
                     ogid = post.id
                     for e in self.rss_items.all():
                         if e.ogid == ogid:
-                            go = False
+                            new = False
                             break
-                    current_tz = timezone.get_current_timezone()
                     post_timestamp = post.published_parsed
                     naive_date = datetime.fromtimestamp(mktime(post_timestamp))
                     pub_date = current_tz.localize(naive_date)
-                    if go:
+                    if new:
                         item = RSSItem(feed=self, ogid=ogid, ogid_is_link=post.guidislink, pub_date=pub_date,
                                        language=d.feed.language, title=post.title, description=post.summary,
                                        link=post.link)
@@ -253,7 +247,6 @@ class Feed(Base):
 
         self.last_refreshed = timezone.now()
         self.save()
-        print _('Successfully refreshed the %s-feed %s' % (self.get_feed_type_display(), self.uuid))
 
 
 @python_2_unicode_compatible
@@ -285,6 +278,18 @@ class Tweet(Base):
     def __str__(self):
         return self.text
 
+    def set_hide(self, which):
+        """Sets the hide state on/off for a Tweet.
+
+        :param which: True or False.
+        :type which: bool
+        :raises: ValueError
+
+        """
+        if not isinstance(which, (bool,)):
+            raise ValueError(_('The "force" parameter must be True or False!'))
+        self.hide = which
+
 
 @python_2_unicode_compatible
 class RSSItem(Base):
@@ -310,6 +315,18 @@ class RSSItem(Base):
 
     def __str__(self):
         return self.title
+
+    def set_hide(self, which):
+        """Sets the hide state on/off for a RSSItem.
+
+        :param which: True or False.
+        :type which: bool
+        :raises: ValueError
+
+        """
+        if not isinstance(which, (bool,)):
+            raise ValueError(_('The "force" parameter must be True or False!'))
+        self.hide = which
 
 
 @python_2_unicode_compatible
