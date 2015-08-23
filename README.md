@@ -18,7 +18,7 @@ Quick start
         'xfeed',
     )
 
-2. Run `python manage.py migrate` to create the polls models.
+2. Run `python manage.py migrate` to create the xfeed's models.
 
 4. Start the development server and visit http://127.0.0.1:8000/admin/
    to create a poll (you'll need the Admin app enabled).
@@ -27,7 +27,7 @@ Quick start
 
 6. Run `python manage.py refresh_feeds` to fetch content.
 
-7. Revisit admin to find your Tweets or RSS items.
+7. Revisit admin to find your Tweets and/or RSS items.
 
 Documentation
 -----------
