@@ -4,6 +4,7 @@ from xfeed.models import Feed
 from django.utils import translation
 from django.utils.translation import ugettext as _
 
+
 class Command(BaseCommand):
     """
     This command will refresh all active feeds

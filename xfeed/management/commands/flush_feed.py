@@ -3,12 +3,11 @@ from django.core.management.base import BaseCommand, CommandError
 from xfeed.models import Feed
 from django.utils import translation
 from django.utils.translation import ugettext as _
-from datetime import datetime
 
 
 class Command(BaseCommand):
     """
-    This command will refresh all active feeds
+    This command will remove all Tweets and RSS items from a feed
     """
     help = _('Refresh all active feeds')
 

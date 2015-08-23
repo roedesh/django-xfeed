@@ -3,12 +3,11 @@ from django.core.management.base import BaseCommand, CommandError
 from xfeed.models import Feed
 from django.utils import translation
 from django.utils.translation import ugettext as _
-from datetime import datetime
 
 
 class Command(BaseCommand):
     """
-    This command will refresh all active feeds
+    This command sets the is_active state of a feed
     """
     help = _('Refresh all active feeds')
 
@@ -23,6 +22,7 @@ class Command(BaseCommand):
             feed = Feed.objects.get(uuid=options['feed_uuid'][0])
             feed.is_active = options['which'][0]
             feed.save()
-            self.stdout.write('Successfully set %s-feed %s is_active to %s' % (feed.feed_type, feed.uuid, feed.is_active))
+            self.stdout.write(
+                'Successfully set %s-feed %s is_active to %s' % (feed.feed_type, feed.uuid, feed.is_active))
         except Feed.DoesNotExist:
             raise CommandError("Feed does not exist")

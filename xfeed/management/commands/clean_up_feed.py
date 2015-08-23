@@ -8,7 +8,7 @@ from datetime import datetime
 
 class Command(BaseCommand):
     """
-    This command will refresh all active feeds
+    This command will clean up a feed by removing Tweets and RSS item before a specified date
     """
     help = _('Refresh all active feeds')
 
