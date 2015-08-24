@@ -1,5 +1,5 @@
 [![Build passed](https://api.travis-ci.org/rschroen/django-xfeed.svg?branch=master)](https://pypi.python.org/pypi/django-xfeed/)
-[![Latest Version](https://pypip.in/version/django-xfeed/badge.svg)](https://pypi.python.org/pypi/django-xfeed/)
+[![Latest Version](https://badge.fury.io/py/django-xfeed.svg)](https://pypi.python.org/pypi/django-xfeed/)
     
 xFeed
 -----------
