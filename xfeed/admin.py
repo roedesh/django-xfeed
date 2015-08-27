@@ -1,5 +1,14 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
 from models import Feed, Tweet, RSSItem, RSSChannelData
+
+__author__ = 'Ruud Schroën'
+__copyright__ = 'Copyright 2015, Ruud Schroën'
+__license__ = 'BSD'
+__version__ = '0.5'
+__maintainer__ = 'Ruud Schroën'
+__email__ = 'schroenruud@gmail.com'
+__status__ = 'Development'
 
 class RSSChannelDataInline(admin.StackedInline):
     model = RSSChannelData

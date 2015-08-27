@@ -22,7 +22,7 @@ import urlparse
 __author__ = 'Ruud Schroën'
 __copyright__ = 'Copyright 2015, Ruud Schroën'
 __license__ = 'BSD'
-__version__ = '0.2'
+__version__ = '0.5'
 __maintainer__ = 'Ruud Schroën'
 __email__ = 'schroenruud@gmail.com'
 __status__ = 'Development'
@@ -61,7 +61,7 @@ class Feed(Base):
     """
     name = models.CharField(max_length=255, verbose_name=_('name'))
     feed_type = models.CharField(max_length=255, choices=FEED_TYPES, verbose_name=_('feed type'))
-    uuid = models.CharField(max_length=100, blank=True, unique=True)
+    uuid = models.CharField(max_length=100, unique=True)
     target = models.CharField(max_length=255, verbose_name=_('feed url'),
                               help_text=_('Enter a valid URL or Twitter screen name'))
     api_point = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('api point'),
