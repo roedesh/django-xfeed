@@ -1,3 +1,4 @@
 include LICENSE
 include README.md
 recursive-include xfeed/templates *
+recursive-include xfeed/templatetags *

@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-xfeed',
-    version='0.0.5',
+    version='0.0.6',
     packages=['xfeed'],
     include_package_data=True,
     license='BSD License',
